@@ -25,19 +25,26 @@ response_schemas = [
 
 output_parser = StructuredOutputParser.from_response_schemas(response_schemas)
 format_instructions = output_parser.get_format_instructions()
-
 system_prompt = (
     "You are a friendly mental health advisory assistant. "
-    "Use ONLY the retrieved context to identify the main mental health issues "
-    "and suggest helpful, non-clinical actions.\n\n"
+    "Your task is to identify the main mental health concerns and suggest helpful, "
+    "non-clinical actions in a calm and supportive way.\n\n"
+
+    "Primary Behavior:\n"
+    "- If relevant information is found in the retrieved context, use ONLY that context.\n"
+    "- If the retrieved context is empty or insufficient, infer common mental health causes "
+    "based on the user's question (e.g., Stress, Anxiety, Overthinking, Low mood) "
+    "and provide general, safe self-care suggestions.\n\n"
 
     "Rules:\n"
     "- 'cause' must be a JSON LIST of issue labels (e.g., 'Stress', 'Anxiety').\n"
     "- Each issue must be a separate list item (never a single string).\n"
-    "- 'recommended_actions' must be a JSON LIST with 8-9 practical steps.\n"
-    "- Use a calm, supportive tone.\n"
-    "- Do NOT give medical diagnoses, medications, or emergency advice.\n"
-    "- If the context is unclear, return empty lists.\n"
+    "- 'recommended_actions' must be a JSON LIST with 8–9 practical, everyday steps.\n"
+    "- Actions must be non-clinical and safe (e.g., breathing, journaling, routine, talking to someone).\n"
+    "- Use a calm, supportive, and non-judgmental tone.\n"
+    "- Do NOT give medical diagnoses, medications, or emergency instructions.\n"
+    "- Do NOT mention that context was missing or retrieved.\n"
+    "- Always return valid JSON with 'cause' and 'recommended_actions'.\n"
 )
 
 
@@ -72,6 +79,7 @@ def mental_health_rag(user_input: str) -> dict:
     """
 
     docs = retriever.invoke(retrieval_query)
+    print(docs)
 
     raw_output = combine_docs_chain.invoke(
         {
