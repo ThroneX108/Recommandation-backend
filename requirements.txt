@@ -11,7 +11,7 @@ torch==2.1.2
 transformers==4.37.2
 huggingface-hub==0.19.4
 
-# LangChain (NEW STACK — compatible)
+# LangChain (0.2.x – compatible stack)
 langchain==0.2.16
 langchain-core==0.2.38
 langchain-community==0.2.16
@@ -21,6 +21,5 @@ langchain-text-splitters==0.2.4
 langchain-google-genai==1.0.8
 google-generativeai==0.7.2
 
-# Pinecone
-pinecone==3.0.2
+# Pinecone (ONLY this — no `pinecone`)
 langchain-pinecone==0.1.3
